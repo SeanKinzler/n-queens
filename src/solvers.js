@@ -15,6 +15,17 @@
 
 
 
+Array.prototype.makeSquare = function(n) {
+  var diff = n - this.length;
+  var newRow = Array(n);
+  for (var j = 0; j < n; j++) {
+    newRow[j] = 0;
+  }
+  for (var i = 0; i < diff; i++) {
+    this.push(newRow);
+  }
+};
+
 window.findNRooksSolution = function(n) {
   var board = new Board({'n': n});
   for (var row = 0; row < n; row++) {
@@ -33,30 +44,28 @@ window.findNRooksSolution = function(n) {
 window.countNRooksSolutions = function(n) {
   var count = 0;
   var board = new Board({'n': n});
+  var testingBoard = board.rows();
   var rowDepthIndex = -1;
-  // debugger;
+
   var recurse = function (array) {
-    var initialArray = array;
     if (rowDepthIndex === n - 1) {
-      var toTest = new Board(array);
-      //console.log(array);
+      var toTest = new Board(testingBoard);
+
       if (!(toTest.hasAnyColConflicts() || toTest.hasAnyRowConflicts())) {
         count++; 
       }
       return;
     }
-    var newRow = Array(n);
-    for (var j = 0; j < n; j++) {
-      newRow[j] = 0;
-    }
-    
+
     rowDepthIndex++;
-    array[rowDepthIndex] = newRow;
+
     for (var i = 0; i < n; i++) {
-      newRow[i] = 1;
-      array[rowDepthIndex] = newRow;
-      recurse(array);
-      newRow[i] = 0;
+      testingBoard[rowDepthIndex][i] = 1;
+      var testBoard = new Board(testingBoard);
+      if (!testBoard.hasAnyRookConflicts) {
+        recurse(array);
+      }
+      testingBoard[rowDepthIndex][i] = 0;
     }
     rowDepthIndex--;
   };

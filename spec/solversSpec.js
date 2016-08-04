@@ -29,7 +29,7 @@ describe('solvers', function() {
     //     expect(solutionCount).to.be.equal(expectedSolutionCount);
     //   });
     // 
-      expect(countNRooksSolutions(7)).to.be.equal(5040);
+      expect(countNRooksSolutions(6)).to.be.equal(720);
     }); //
   });
 
