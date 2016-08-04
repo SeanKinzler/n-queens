@@ -16,18 +16,55 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
-
+  var board = new Board({'n': n});
+  for (var row = 0; row < n; row++) {
+    for (var col = 0; col < n; col++) {
+      if (board.isLegalRookPlay(row, col)) {
+        board.togglePiece(row, col);
+      }
+    }
+  }
+  solution = board.rows();
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solution = undefined; //fixme
+  var count = 0;
+  var board = new Board({'n': n});
+  var rowDepthIndex = -1;
+  // debugger;
+  var recurse = function (array) {
+    var initialArray = array;
+    if (rowDepthIndex === n - 1) {
+      var toTest = new Board(array);
+      //console.log(array);
+      if (!(toTest.hasAnyColConflicts() || toTest.hasAnyRowConflicts())) {
+        count++; 
+      }
+      return;
+    }
+    var newRow = Array(n);
+    for (var j = 0; j < n; j++) {
+      newRow[j] = 0;
+    }
+    
+    rowDepthIndex++;
+    array[rowDepthIndex] = newRow;
+    for (var i = 0; i < n; i++) {
+      newRow[i] = 1;
+      array[rowDepthIndex] = newRow;
+      recurse(array);
+      newRow[i] = 0;
+    }
+    rowDepthIndex--;
+  };
+  recurse([]);
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;
+  var solution = count;
+  console.log('Number of solutions for ' + n + ' rooks:', solution);
+  return solution;
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
