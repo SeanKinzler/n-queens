@@ -124,28 +124,24 @@ window.findNQueensSolution = function(n) {
 window.countNQueensSolutions = function(n) {
   var count = 0;
   var board = new Board({'n': n});
-  var testingBoard = board.rows();
+
   var rowDepthIndex = -1;
 
   var recurse = function () {
     if (rowDepthIndex === n - 1) {
-      var toTest = new Board(testingBoard);
-
-      if (!toTest.hasAnyQueensConflicts()) {
-        count++; 
-      }
+      count++; 
       return;
     }
 
     rowDepthIndex++;
 
     for (var i = 0; i < n; i++) {
-      testingBoard[rowDepthIndex][i] = 1;
-      var testBoard = new Board(testingBoard);
-      if (!testBoard.hasAnyQueensConflicts()) {
+      board.togglePiece(rowDepthIndex, i);
+
+      if (!board.hasAnyQueensConflicts()) {
         recurse();
       }
-      testingBoard[rowDepthIndex][i] = 0;
+      board.togglePiece(rowDepthIndex, i);
     }
     rowDepthIndex--;
   };
