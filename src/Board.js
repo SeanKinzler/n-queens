@@ -140,8 +140,8 @@
       if (majorDiagonalColumnIndexAtFirstRow < 0) {
         var colIndex = 0;
         var rowIndex = Math.abs(majorDiagonalColumnIndexAtFirstRow);
-        while (rowIndex < board.length) {
-          diag.push(board[rowIndex][colIndex]);
+        while (rowIndex < board.length && pieceCount < 2) {
+          if (board[rowIndex][colIndex] === 1) { pieceCount++; } 
           colIndex++;
           rowIndex++;
         }
@@ -149,17 +149,12 @@
       } else {
         colIndex = majorDiagonalColumnIndexAtFirstRow;
         rowIndex = 0;
-        while (colIndex < board.length) {
-          diag.push(board[rowIndex][colIndex]);
+        while (colIndex < board.length && pieceCount < 2) {
+          if (board[rowIndex][colIndex] === 1) { pieceCount++; } 
           colIndex++;
           rowIndex++;
         }
       }
-      diag.forEach(function(item) {
-        if (item === 1) {
-          pieceCount++;
-        }
-      });
       return pieceCount > 1;
     },
 
@@ -181,31 +176,27 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      var n = this.rows().length;
+      var board = this.rows();
+      var n = board.length;
       var diag = [];
       var pieceCount = 0;
       if (minorDiagonalColumnIndexAtFirstRow < n) {
         var rowIndex = 0;
         var colIndex = minorDiagonalColumnIndexAtFirstRow;
-        while (colIndex >= 0) {
-          diag.push(this.rows()[rowIndex][colIndex]);
-          rowIndex++;
+        while (colIndex >= 0 && pieceCount < 2) {
+          if (board[rowIndex][colIndex] === 1) { pieceCount++; } 
           colIndex--;
+          rowIndex++;
         }
       } else {
         var rowIndex = minorDiagonalColumnIndexAtFirstRow - (n - 1);
         var colIndex = n - 1;
-        while (rowIndex < n) {
-          diag.push(this.rows()[rowIndex][colIndex]);
+        while (rowIndex < n && pieceCount < 2) {
+          if (board[rowIndex][colIndex] === 1) { pieceCount++; } 
           rowIndex++;
           colIndex--;
         } 
       }
-      diag.forEach(function(item) {
-        if (item === 1) {
-          pieceCount++;
-        }
-      });
       return pieceCount > 1;
     },
 
